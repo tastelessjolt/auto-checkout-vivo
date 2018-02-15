@@ -10,7 +10,7 @@ function onGot(item) {
 	}
 	else {
 		var box = document.getElementById("box");
-		box.innerHTML = JSON.stringify(item["mapping"]);
+		box.value = JSON.stringify(item["mapping"]);
 	}
 }
 
