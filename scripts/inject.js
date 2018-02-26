@@ -139,12 +139,12 @@ function onError(error) {
 
 // if first time running the extension
 function notFound(error) {
-	let setting = browser.storage.local.set({"mapping" : global_mapping});
+	let setting = browser.storage.sync.set({"mapping" : global_mapping});
 	setting.then(reRunOnGot, onError);
 }
 
 function reRunOnGot() {
-	let gettingItem = browser.storage.local.get();
+	let gettingItem = browser.storage.sync.get();
 	gettingItem.then(onGot, onError);
 }
 
@@ -173,8 +173,8 @@ function callback(event) {
 	state = state + 1;
 
 	console.log(global_mapping);
-	let setting = browser.storage.local.set({"mapping" : global_mapping});
-	// let setting = browser.storage.local.set("random");
+	let setting = browser.storage.sync.set({"mapping" : global_mapping});
+	// let setting = browser.storage.sync.set("random");
 	// // just check for errors
 	setting.then(null, onError);
 
@@ -198,10 +198,10 @@ function callback(event) {
 	}
 }
 
-let gettingItem = browser.storage.local.get();
+let gettingItem = browser.storage.sync.get();
 	gettingItem.then(onGot, notFound);
 
 
-// let setting = browser.storage.local.set({"mapping": {"hello": "Adf"}});
+// let setting = browser.storage.sync.set({"mapping": {"hello": "Adf"}});
 // just check for errors
 // setting.then(null, onError);
