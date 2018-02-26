@@ -2,7 +2,7 @@ console.log ("Activate xD");
 
 console.log (CryptoJS.MD5("test"));
 
-document.body.style.border = "5px solid red";
+document.body.style.border = "5px solid green";
 
 var ks_form = document.getElementById("formVerify");
 var ks_keywords = ks_form.getElementsByTagName("span");
