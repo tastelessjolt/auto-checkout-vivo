@@ -22,7 +22,8 @@ for (var i = 0; i < ks_imgs.length; i++) {
 }
 
 var global_mapping = {};
-var state = 0;
+// var state = 0;
+var loadingDone = false;
 
 function loadJSON(path, success, error)
 {
@@ -62,6 +63,7 @@ function onImg(img, id) {
 	// console.log (`${id}: ${img_md5s[id]}`);
 	if (img_md5s.length === ks_imgs.length) {
 		console.log("All image MD5s calculated");
+		console.log(img_md5s);
 		allImagesLoaded();
 	} 
 }
@@ -101,6 +103,7 @@ function revSearchOnMultimap(map, keyword) {
 }
 
 function allImagesLoaded() {
+	loadingDone = true;
 	console.log(`Checking whether ${keywords[0]} is in mapping`);
 
 	var res = revSearchOnMultimap(global_mapping, keywords[0]);
@@ -109,6 +112,7 @@ function allImagesLoaded() {
 	}
 	else {
 		console.log ("Found entries. Acting on it.");
+		console.log(res);
 		for (var i = 0; i < res.length; i++) {
 			var pos = img_md5s.indexOf(res[i]);
 			if (pos !== -1) {
@@ -118,8 +122,9 @@ function allImagesLoaded() {
 				console.log(`Checking whether ${keywords[1]} is in mapping`);
 				var res2 = revSearchOnMultimap(global_mapping, keywords[1]);
 				if (res2.length !== 0) {
-					for (var j = 0; j < res.length; j++) {
-						pos = img_md5s.indexOf(res[j]);
+					console.log(res2);
+					for (var j = 0; j < res2.length; j++) {
+						pos = img_md5s.indexOf(res2[j]);
 						if (pos !== -1) {
 							console.log(`Clicking ${pos} image`);
 							ks_imgs[pos].click();
@@ -149,20 +154,41 @@ function reRunOnGot() {
 }
 
 function callback(event) {
+	console.log (event);
+
+	if (event.mozInputSource === 0) {
+		// because it was clicked by js
+		return;
+	}
+
+	if (!loadingDone) {
+		return;
+	}
+
+	var imgsSelected = document.getElementsByClassName("imgCapSelect");
+	if (imgsSelected.length === 0) {
+		return;
+	} 
+
 	var img = event.target;
 	var index = img.getAttribute("indexvalue");
 	var src = img.getAttribute("src");
 
+	console.log(index + " - " + imgsSelected.length);
+	console.log(img_md5s);
+	if (img_md5s.length == 0){
+		alert("MD5 not completed yet");
+	}
 	console.log ("Checking whether it already has any entries");
-	var res = revSearchOnMultimap(global_mapping, keywords[state]);
+	var res = revSearchOnMultimap(global_mapping, keywords[imgsSelected.length - 1]);
 	if (res.length === 0) {
 		console.log ("No entries found. Adding...");
 		var temp = global_mapping[img_md5s[index]];
 		if (temp === undefined) {
-			global_mapping[img_md5s[index]] = [keywords[state]];
+			global_mapping[img_md5s[index]] = [keywords[imgsSelected.length - 1]];
 		}
 		else {
-			global_mapping[img_md5s[index]].push(keywords[state]);
+			global_mapping[img_md5s[index]].push(keywords[imgsSelected.length - 1]);
 		}
 	}
 	else {
@@ -170,16 +196,14 @@ function callback(event) {
 		console.log (`Selected entry: ${img_md5s[index]}`);
 	}
 
-	state = state + 1;
-
 	console.log(global_mapping);
 	let setting = browser.storage.sync.set({"mapping" : global_mapping});
 	// let setting = browser.storage.sync.set("random");
 	// // just check for errors
 	setting.then(null, onError);
 
-	console.log(`Checking whether ${keywords[1]} is in mapping`);
-	if (state === 1) {
+	if (imgsSelected.length === 1) {
+		console.log(`Checking whether ${keywords[imgsSelected.length]} is in mapping`);
 		var res = revSearchOnMultimap(global_mapping, keywords[1]);
 		if (res.length === 0) {
 			console.log ("Not found. Continuing to wait for user input...");

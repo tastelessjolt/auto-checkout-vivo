@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "kissanime-skip",
-	"version": "2.2",
+	"version": "3.0",
 
 	"description": "Skip the annoying kissanime AreYouHuman answers",
 	"homepage_url": "http://harshithgoka.me/",
