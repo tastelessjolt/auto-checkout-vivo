@@ -1,5 +1,8 @@
 # Kissanime Skip
 
+## Usage
+If it doesn't automatically click, you have to click in the order of the keywords it asks, for it learn(I mean store).
+
 ## Installing the extension 
 Download the signed extension from the releases page and Firefox should prompt you to install.
 If not, go to (in Firefox)
