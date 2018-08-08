@@ -1,16 +1,16 @@
 {
 	"manifest_version": 2,
-	"name": "kissanime-skip",
-	"version": "3.0",
+	"name": "Auto-Checkout Vivo",
+	"version": "0.1",
 
-	"description": "Skip the annoying kissanime AreYouHuman answers",
+	"description": "Auto checkout any buy page in Vivo website",
 	"homepage_url": "http://harshithgoka.me/",
 	"icons": {
 		"48": "img/logo-48.png"
 	},
 
 	"permissions": [
-		"*://kissanime.ru/*",
+		"*://shop.vivo.com/*",
 		"activeTab",
 		"storage",
 		"unlimitedStorage"
@@ -18,17 +18,13 @@
 
 	"browser_action": {
 		"default_icon": "img/logo-48.png",
-		"default_title": "Skip Check",
+		"default_title": "Auto-Checkout Vivo",
 		"default_popup": "popup/popup.html"
 	},
 	"content_scripts": [
     	{
-			"matches": ["*://kissanime.ru/*/AreYouHuman2*"],
-			"js": ["scripts/md5.js", "scripts/inject.js"]
+			"matches": ["*://shop.vivo.com/in/cart/buynow/*"],
+			"js": ["scripts/inject.js"]
     	}
-    ],
-
-	"web_accessible_resources": [
-		"content/learnt.json"
-	]
+    ]
 }
